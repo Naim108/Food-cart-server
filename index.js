@@ -13,8 +13,21 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     try{
         await client.connect();
-        const database=client.db('Services')
-        const productCollection=database.collection('products')
+        const database=client.db('productsItem')
+        const productsCollection=database.collection('products')
+        // add product to mongodb
+        app.post('/addProduct',async(req,res)=>{
+            const result=await productsCollection.insertOne(req.body)
+             .then(result=>{
+                 res.json(result.insertedId)
+             })
+         })
+            //   get all products to array
+    app.get('/products',async(req,res)=>{
+        const result=await productsCollection.find({}).toArray();
+        res.send(result)
+       
+    })
 
       
 
